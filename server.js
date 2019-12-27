@@ -121,6 +121,22 @@ app.get('/prodlist', function(req, res) {
     })
   })
 
+ /* API action: TEST - FInd columns */
+  .get('/showcols', function(req, res) {
+
+    let sqlQuery = "Select * from " + dbschema + ".XXIBM_PRODUCT_SKU";
+
+    global.dbconn.query(sqlQuery, function(err, rows, fields) {
+      if (err) throw err;
+
+      console.log('DB fetch success for /showcols');
+
+      res.type('application/json');
+    res.set('Access-Control-Allow-Origin', '*');
+    res.end(JSON.stringify(rows));
+    })
+  })
+
   /* API action: Item details based on Item_Number */
   .get('/itemdetail/:id', function(req, res) {
 
