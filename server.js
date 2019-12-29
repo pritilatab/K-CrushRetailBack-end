@@ -10,7 +10,7 @@ var vcapServices = require('vcap_services');
 var request = require('request');
 
 // load in the environment data for our application
-//const config = require('.env.json');
+const config = require('env.json');
 
 var path = require('path');
 
@@ -63,10 +63,10 @@ var prodlist = [
 /* 
 * Init DB code
 */
-const dbhost = 'custom-mysql.gamification.svc.cluster.local';
-const dbuser = 'xxuser';
-const dbpass = 'welcome1';
-const dbschema = 'sampledb';
+const dbhost = 'remotemysql.com';
+const dbuser = 'Ha3WnosBo6';
+const dbpass = 'ks4SKRb4h6';
+const dbschema = 'Ha3WnosBo6';
 
 const db = mysql.createConnection({
   host: dbhost,
@@ -91,7 +91,7 @@ app.get('/', function (req, res) {
 /* API action: product list */
 app.get('/prodlist', function(req, res) {
 
-  let sqlQuery = "Select item_number, CONCAT(description,'--',SKUAtt_Value1,'--',SKUAtt_Value2) item_desc from " + dbschema + ".XXIBM_PRODUCT_SKU";
+  let sqlQuery = "Select item_number, CONCAT(description,'--',SKU_ATTRIBUTE_VALUE1,'--',SKU_ATTRIBUTE_VALUE2) item_desc from " + dbschema + ".XXIBM_PRODUCT_SKU";
 
   global.dbconn.query(sqlQuery, function(err, rows, fields) {
     if (err) throw err;
@@ -109,7 +109,7 @@ app.get('/prodlist', function(req, res) {
   /* API action: DEBUG - Display product list as HTML */
   .get('/prodlist_show', function(req, res) {
 
-    let sqlQuery = "Select item_number, CONCAT(description,'--',SKUAtt_Value1,'--',SKUAtt_Value2) item_desc from " + dbschema + ".XXIBM_PRODUCT_SKU";
+    let sqlQuery = "Select item_number, CONCAT(description,'--',SKU_ATTRIBUTE_VALUE1,'--',SKU_ATTRIBUTE_VALUE2) item_desc from " + dbschema + ".XXIBM_PRODUCT_SKU";
 
     global.dbconn.query(sqlQuery, function(err, rows, fields) {
       if (err) throw err;
@@ -121,26 +121,10 @@ app.get('/prodlist', function(req, res) {
     })
   })
 
- /* API action: TEST - FInd columns */
-  .get('/showcols', function(req, res) {
-
-    let sqlQuery = "Select * from " + dbschema + ".XXIBM_PRODUCT_SKU";
-
-    global.dbconn.query(sqlQuery, function(err, rows, fields) {
-      if (err) throw err;
-
-      console.log('DB fetch success for /showcols');
-
-      res.type('application/json');
-    res.set('Access-Control-Allow-Origin', '*');
-    res.end(JSON.stringify(rows));
-    })
-  })
-
   /* API action: Item details based on Item_Number */
   .get('/itemdetail/:id', function(req, res) {
 
-    let sqlQuery = "Select   a.Item_Number sku_Item_Number,   a.Description sku_Description,   a.Long_Description sku_Long_Description,   a.Catalogue_Category sku_Catalogue_Category,   a.SKU_Unit_Of_Meaure sku_SKU_Unit_Of_Meaure,   a.Style_Item sku_Style_Item,   a.SKUAttribute1 sku_SKUAttribute1,   a.SKUAttribute2 sku_SKUAttribute2,   a.SKUAttribute3 sku_SKUAttribute3,   a.SKUAttribute4 sku_SKUAttribute4,   a.SKUAttribute5 sku_SKUAttribute5,   a.SKUAttribute6 sku_SKUAttribute6,   a.SKUAtt_Value1 sku_SKUAtt_Value1,   a.SKUAtt_Value2 sku_SKUAtt_Value2,   a.SKUAtt_Value3 sku_SKUAtt_Value3,   a.SKUAtt_Value4 sku_SKUAtt_Value4,   a.SKUAtt_Value5 sku_SKUAtt_Value5,   a.SKUAtt_Value6 sku_SKUAtt_Value6,   b.Segment cat_Segment,   b.Segment_Name cat_Segment_Name,   b.Family cat_Family,   b.Family_Name cat_Family_Name,   b.Class cat_Class,   b.Class_Name cat_Class_Name,   b.Commodity_Name cat_Commodity_Name,   c.Description sty_Description,   c.Long_Description sty_Long_Description,   c.Brand sty_Brand,   p.PriceID prc_PriceID,   p.List_Price prc_List_Price,   p.Discount prc_Discount,   p.InStock prc_InStock,   p.Price_Effective_Date prc_Price_Effective_Date from   " + dbschema + ".XXIBM_PRODUCT_SKU a  inner join " + dbschema + ".XXIBM_PRODUCT_CATALOG b  on a.Catalogue_Category = b.Commodity inner join " + dbschema + ".XXIBM_PRODUCT_STYLE c  on a.Style_Item = c.Item_Number left outer join " + dbschema + ".XXIBM_PRODUCT_PRICING p  on a.Item_Number = p.Item_Number where a.Item_Number = ?";
+    let sqlQuery = "Select   a.Item_Number sku_Item_Number,   a.Description sku_Description,   a.Long_Description sku_Long_Description,   a.Catalogue_Category sku_Catalogue_Category,   a.SKU_Unit_Of_Meaure sku_SKU_Unit_Of_Meaure,   a.Style_Item sku_Style_Item,   a.SKU_ATTRIBUTE1 sku_SKU_ATTRIBUTE1,   a.SKU_ATTRIBUTE2 sku_SKU_ATTRIBUTE2,   a.SKU_ATTRIBUTE3 sku_SKU_ATTRIBUTE3,   a.SKU_ATTRIBUTE4 sku_SKU_ATTRIBUTE4,   a.SKU_ATTRIBUTE5 sku_SKU_ATTRIBUTE5,   a.SKU_ATTRIBUTE6 sku_SKU_ATTRIBUTE6,   a.SKU_ATTRIBUTE_VALUE1 sku_SKU_ATTRIBUTE_VALUE1,   a.SKU_ATTRIBUTE_VALUE2 sku_SKU_ATTRIBUTE_VALUE2,   a.SKU_ATTRIBUTE_VALUE3 sku_SKU_ATTRIBUTE_VALUE3,   a.SKU_ATTRIBUTE_VALUE4 sku_SKU_ATTRIBUTE_VALUE4,   a.SKU_ATTRIBUTE_VALUE5 sku_SKU_ATTRIBUTE_VALUE5,   a.SKU_ATTRIBUTE_VALUE6 sku_SKU_ATTRIBUTE_VALUE6,   b.Segment cat_Segment,   b.Segment_Name cat_Segment_Name,   b.Family cat_Family,   b.Family_Name cat_Family_Name,   b.Class cat_Class,   b.Class_Name cat_Class_Name,   b.Commodity_Name cat_Commodity_Name,   c.Description sty_Description,   c.Long_Description sty_Long_Description,   c.Brand sty_Brand,   p.PriceID prc_PriceID,   p.List_Price prc_List_Price,   p.Discount prc_Discount,   p.InStock prc_InStock,   p.Price_Effective_Date prc_Price_Effective_Date from   " + dbschema + ".XXIBM_PRODUCT_SKU a  inner join " + dbschema + ".XXIBM_PRODUCT_CATALOG b  on a.Catalogue_Category = b.Commodity inner join " + dbschema + ".XXIBM_PRODUCT_STYLE c  on a.Style_Item = c.Item_Number left outer join " + dbschema + ".XXIBM_PRODUCT_PRICING p  on a.Item_Number = p.Item_Number where a.Item_Number = ?";
 
     global.dbconn.query(sqlQuery, [req.params.id], function(err, rows, fields) {
       if (err) throw err;
@@ -158,7 +142,7 @@ app.get('/prodlist', function(req, res) {
   /* API action: DEBUG - Item details based on Item_Number */
   .get('/itemdetail_show/:id', function(req, res) {
 
-    let sqlQuery = "Select   a.Item_Number sku_Item_Number,   a.Description sku_Description,   a.Long_Description sku_Long_Description,   a.Catalogue_Category sku_Catalogue_Category,   a.SKU_Unit_Of_Meaure sku_SKU_Unit_Of_Meaure,   a.Style_Item sku_Style_Item,   a.SKUAttribute1 sku_SKUAttribute1,   a.SKUAttribute2 sku_SKUAttribute2,   a.SKUAttribute3 sku_SKUAttribute3,   a.SKUAttribute4 sku_SKUAttribute4,   a.SKUAttribute5 sku_SKUAttribute5,   a.SKUAttribute6 sku_SKUAttribute6,   a.SKUAtt_Value1 sku_SKUAtt_Value1,   a.SKUAtt_Value2 sku_SKUAtt_Value2,   a.SKUAtt_Value3 sku_SKUAtt_Value3,   a.SKUAtt_Value4 sku_SKUAtt_Value4,   a.SKUAtt_Value5 sku_SKUAtt_Value5,   a.SKUAtt_Value6 sku_SKUAtt_Value6,   b.Segment cat_Segment,   b.Segment_Name cat_Segment_Name,   b.Family cat_Family,   b.Family_Name cat_Family_Name,   b.Class cat_Class,   b.Class_Name cat_Class_Name,   b.Commodity_Name cat_Commodity_Name,   c.Description sty_Description,   c.Long_Description sty_Long_Description,   c.Brand sty_Brand,   p.PriceID prc_PriceID,   p.List_Price prc_List_Price,   p.Discount prc_Discount,   p.InStock prc_InStock,   p.Price_Effective_Date prc_Price_Effective_Date from   " + dbschema + ".XXIBM_PRODUCT_SKU a  inner join " + dbschema + ".XXIBM_PRODUCT_CATALOG b  on a.Catalogue_Category = b.Commodity inner join " + dbschema + ".XXIBM_PRODUCT_STYLE c  on a.Style_Item = c.Item_Number left outer join " + dbschema + ".XXIBM_PRODUCT_PRICING p  on a.Item_Number = p.Item_Number where a.Item_Number = ?";
+    let sqlQuery = "Select   a.Item_Number sku_Item_Number,   a.Description sku_Description,   a.Long_Description sku_Long_Description,   a.Catalogue_Category sku_Catalogue_Category,   a.SKU_Unit_Of_Meaure sku_SKU_Unit_Of_Meaure,   a.Style_Item sku_Style_Item,   a.SKU_ATTRIBUTE1 sku_SKU_ATTRIBUTE1,   a.SKU_ATTRIBUTE2 sku_SKU_ATTRIBUTE2,   a.SKU_ATTRIBUTE3 sku_SKU_ATTRIBUTE3,   a.SKU_ATTRIBUTE4 sku_SKU_ATTRIBUTE4,   a.SKU_ATTRIBUTE5 sku_SKU_ATTRIBUTE5,   a.SKU_ATTRIBUTE6 sku_SKU_ATTRIBUTE6,   a.SKU_ATTRIBUTE_VALUE1 sku_SKU_ATTRIBUTE_VALUE1,   a.SKU_ATTRIBUTE_VALUE2 sku_SKU_ATTRIBUTE_VALUE2,   a.SKU_ATTRIBUTE_VALUE3 sku_SKU_ATTRIBUTE_VALUE3,   a.SKU_ATTRIBUTE_VALUE4 sku_SKU_ATTRIBUTE_VALUE4,   a.SKU_ATTRIBUTE_VALUE5 sku_SKU_ATTRIBUTE_VALUE5,   a.SKU_ATTRIBUTE_VALUE6 sku_SKU_ATTRIBUTE_VALUE6,   b.Segment cat_Segment,   b.Segment_Name cat_Segment_Name,   b.Family cat_Family,   b.Family_Name cat_Family_Name,   b.Class cat_Class,   b.Class_Name cat_Class_Name,   b.Commodity_Name cat_Commodity_Name,   c.Description sty_Description,   c.Long_Description sty_Long_Description,   c.Brand sty_Brand,   p.PriceID prc_PriceID,   p.List_Price prc_List_Price,   p.Discount prc_Discount,   p.InStock prc_InStock,   p.Price_Effective_Date prc_Price_Effective_Date from   " + dbschema + ".XXIBM_PRODUCT_SKU a  inner join " + dbschema + ".XXIBM_PRODUCT_CATALOG b  on a.Catalogue_Category = b.Commodity inner join " + dbschema + ".XXIBM_PRODUCT_STYLE c  on a.Style_Item = c.Item_Number left outer join " + dbschema + ".XXIBM_PRODUCT_PRICING p  on a.Item_Number = p.Item_Number where a.Item_Number = ?";
 
     global.dbconn.query(sqlQuery, [req.params.id], function(err, rows, fields) {
       if (err) throw err;
@@ -190,7 +174,7 @@ app.get('/prodlist', function(req, res) {
   })
 
   /* API action: Search - Watson STT token authorization */
- /* .get('/speech-to-text/token', function(req, res) {
+  .get('/speech-to-text/token', function(req, res) {
 
       console.log(config);
       var methodName = 'stt_token';
@@ -215,13 +199,13 @@ app.get('/prodlist', function(req, res) {
             res.send({failed: error.message}) 
           }
       });
-  })*/
+  })
 
 
   /* API action: All Item details Under a Commodity */
   .get('/commodity/:id', function(req, res) {
 
-    let sqlQuery = "Select   a.Item_Number sku_Item_Number,   a.Description sku_Description,   a.Long_Description sku_Long_Description,   a.Catalogue_Category sku_Catalogue_Category,   a.SKU_Unit_Of_Meaure sku_SKU_Unit_Of_Meaure,   a.Style_Item sku_Style_Item,   a.SKUAttribute1 sku_SKUAttribute1,   a.SKUAttribute2 sku_SKUAttribute2,   a.SKUAttribute3 sku_SKUAttribute3,   a.SKUAttribute4 sku_SKUAttribute4,   a.SKUAttribute5 sku_SKUAttribute5,   a.SKUAttribute6 sku_SKUAttribute6,   a.SKUAtt_Value1 sku_SKUAtt_Value1,   a.SKUAtt_Value2 sku_SKUAtt_Value2,   a.SKUAtt_Value3 sku_SKUAtt_Value3,   a.SKUAtt_Value4 sku_SKUAtt_Value4,   a.SKUAtt_Value5 sku_SKUAtt_Value5,   a.SKUAtt_Value6 sku_SKUAtt_Value6,   b.Segment cat_Segment,   b.Segment_Name cat_Segment_Name,   b.Family cat_Family,   b.Family_Name cat_Family_Name,   b.Class cat_Class,   b.Class_Name cat_Class_Name,   b.Commodity_Name cat_Commodity_Name,   c.Description sty_Description,   c.Long_Description sty_Long_Description,   c.Brand sty_Brand,   p.PriceID prc_PriceID,   p.List_Price prc_List_Price,   p.Discount prc_Discount,   p.InStock prc_InStock,   p.Price_Effective_Date prc_Price_Effective_Date from   " + dbschema + ".XXIBM_PRODUCT_SKU a  inner join " + dbschema + ".XXIBM_PRODUCT_CATALOG b  on a.Catalogue_Category = b.Commodity inner join " + dbschema + ".XXIBM_PRODUCT_STYLE c  on a.Style_Item = c.Item_Number left outer join " + dbschema + ".XXIBM_PRODUCT_PRICING p  on a.Item_Number = p.Item_Number where a.Catalogue_Category = ?";
+    let sqlQuery = "Select   a.Item_Number sku_Item_Number,   a.Description sku_Description,   a.Long_Description sku_Long_Description,   a.Catalogue_Category sku_Catalogue_Category,   a.SKU_Unit_Of_Meaure sku_SKU_Unit_Of_Meaure,   a.Style_Item sku_Style_Item,   a.SKU_ATTRIBUTE1 sku_SKU_ATTRIBUTE1,   a.SKU_ATTRIBUTE2 sku_SKU_ATTRIBUTE2,   a.SKU_ATTRIBUTE3 sku_SKU_ATTRIBUTE3,   a.SKU_ATTRIBUTE4 sku_SKU_ATTRIBUTE4,   a.SKU_ATTRIBUTE5 sku_SKU_ATTRIBUTE5,   a.SKU_ATTRIBUTE6 sku_SKU_ATTRIBUTE6,   a.SKU_ATTRIBUTE_VALUE1 sku_SKU_ATTRIBUTE_VALUE1,   a.SKU_ATTRIBUTE_VALUE2 sku_SKU_ATTRIBUTE_VALUE2,   a.SKU_ATTRIBUTE_VALUE3 sku_SKU_ATTRIBUTE_VALUE3,   a.SKU_ATTRIBUTE_VALUE4 sku_SKU_ATTRIBUTE_VALUE4,   a.SKU_ATTRIBUTE_VALUE5 sku_SKU_ATTRIBUTE_VALUE5,   a.SKU_ATTRIBUTE_VALUE6 sku_SKU_ATTRIBUTE_VALUE6,   b.Segment cat_Segment,   b.Segment_Name cat_Segment_Name,   b.Family cat_Family,   b.Family_Name cat_Family_Name,   b.Class cat_Class,   b.Class_Name cat_Class_Name,   b.Commodity_Name cat_Commodity_Name,   c.Description sty_Description,   c.Long_Description sty_Long_Description,   c.Brand sty_Brand,   p.PriceID prc_PriceID,   p.List_Price prc_List_Price,   p.Discount prc_Discount,   p.InStock prc_InStock,   p.Price_Effective_Date prc_Price_Effective_Date from   " + dbschema + ".XXIBM_PRODUCT_SKU a  inner join " + dbschema + ".XXIBM_PRODUCT_CATALOG b  on a.Catalogue_Category = b.Commodity inner join " + dbschema + ".XXIBM_PRODUCT_STYLE c  on a.Style_Item = c.Item_Number left outer join " + dbschema + ".XXIBM_PRODUCT_PRICING p  on a.Item_Number = p.Item_Number where a.Catalogue_Category = ?";
 
     global.dbconn.query(sqlQuery, [req.params.id], function(err, rows, fields) {
       if (err) throw err;
