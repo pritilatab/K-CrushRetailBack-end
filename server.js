@@ -174,7 +174,7 @@ app.get('/prodlist', function(req, res) {
   })
 
   /* API action: Search - Watson STT token authorization */
- /* .get('/speech-to-text/token', function(req, res) {
+  /* .get('/speech-to-text/token', function(req, res) {
 
       console.log(config);
       var methodName = 'stt_token';
