@@ -13,7 +13,7 @@
 
         <ul>
         <% prodlist.forEach(function(item, index) { %>
-            <li><a href="/prodlist/item/<%= item.item_number %>"><%= item.item_desc %></a> 
+            <li><a href="/itemdetail/<%= item.item_number %>"><%= item.item_desc %></a> 
             </li>
         <% }); %>
         </ul>
