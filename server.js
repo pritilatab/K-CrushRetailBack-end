@@ -317,8 +317,12 @@ app.get('/prodlist', function(req, res) {
     })
 
   })*/
-
-
+/* API action: Test Images pull */
+  .get('/image/:id', function(req, res) {
+      //console.log(rows)	  
+      res.render('imageshow.ejs', { images: req.params.id });
+    })
+  })
   /* test conn */
   .get('/testconn', function(req, res) {
 
