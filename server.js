@@ -317,11 +317,13 @@ app.get('/prodlist', function(req, res) {
     })
 
   })*/
+
 /* API action: Test Images pull */
   .get('/image/:id', function(req, res) {
       //console.log(rows)	  
       res.render('imageshow.ejs', { images: req.params.id });
   })
+
   /* test conn */
   .get('/testconn', function(req, res) {
 
@@ -333,8 +335,22 @@ app.get('/prodlist', function(req, res) {
 
     res.writeHead(200);
     res.end('connected');
+  })
+
+/* pull all tables in a schema */
+  .get('/alltables/:id', function(req, res) {
+
+    let sqlQuery = "SELECT * FROM information_schema.tables WHERE table_schema = ?";
+    
+    global.dbconn.query(sqlQuery, [req.params.id], function(err, rows, fields) {
+      if (err) throw err;
+
+      console.log('Fetch all tables');
+      res.end(JSON.stringify(rows));
+    })
 
   });
+
 
   /* Redirects to the products list if the page requested is not found */
   app.use(function(req, res, next) {
