@@ -2,16 +2,6 @@ var express = require('express');
 //var session = require('cookie-session'); // Loads the piece of middleware for sessions
 var bodyParser = require('body-parser'); // Loads the piece of middleware for managing the settings
 
- // get required modules for speech to text
-var extend = require('extend');
-const watsonstt = require('ibm-watson/speech-to-text/v1');
-//const { IamAuthenticator } = require('ibm-watson/auth');
-var vcapServices = require('vcap_services');
-var request = require('request');
-
-// load in the environment data for our application
-//const config = require('env.json');
-
 var path = require('path');
 
 const mysql = require('mysql');//mysql db
@@ -22,51 +12,22 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+//fix the cross origin request (CORS) issue
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
+
 /* Using sessions */
 //app.use(session({ secret: 'wmt1ockbtopsecret' }));
-
-/*
-var prodlist = [
-  {
-    sku_item: 1001,
-    item_desc: "Reflex Women’s Track Jacket",
-    size: "Medium",
-    color: "Black",
-    list_prc: "$39.33",
-    disc_pct: "5%",
-    seg_nm: "Apparel and Luggage and Personal Care Products",
-    fam_nm: "Clothing",
-    cls_nm: "Athletic wear",
-    com_nm: "Womens athletic wear",
-    sty_nm: "Reflex Women’s Track Jacket",
-    brnd_nm: "Reflex",
-    sku_UOM: "Each"
-  },
-  {
-    sku_item: 1002,
-    item_desc: "MUSHARE Women's Formal Suit",
-    size: "Large",
-    color: "Army Green",
-    list_prc: "$99",
-    disc_pct: "0%",
-    seg_nm: "Apparel and Luggage and Personal Care Products",
-    fam_nm: "Clothing",
-    cls_nm: "Suits",
-    com_nm: "Womens suits",
-    sty_nm: "MUSHARE Women's Formal Suit",
-    brnd_nm: "MUSHARE",
-    sku_UOM: "Each"
-  }
-];
-*/
 
 /* 
 * Init DB code
 */
-const dbhost = 'remotemysql.com';
-const dbuser = 'Ha3WnosBo6';
-const dbpass = 'ks4SKRb4h6';
-const dbschema = 'Ha3WnosBo6';
+const dbhost = 'custom-mysql.gamification.svc.cluster.local';
+const dbuser = 'xxuser';
+const dbpass = 'welcome1';
+const dbschema = 'sampledb';
 
 const db = mysql.createConnection({
   host: dbhost,
@@ -100,7 +61,6 @@ app.get('/prodlist', function(req, res) {
 
     //console.log(rows);
     res.type('application/json');
-    res.set('Access-Control-Allow-Origin', '*');
     res.end(JSON.stringify(rows));
   })
 
@@ -116,7 +76,6 @@ app.get('/prodlist', function(req, res) {
 
       console.log('DB fetch success for /prodlist_debug');
 
-      res.set('Access-Control-Allow-Origin', '*');
       res.render('prodlist.ejs', { prodlist: rows });
     })
   })
@@ -132,7 +91,6 @@ app.get('/prodlist', function(req, res) {
       console.log('DB fetch success for /itemdetail/id');
 
       //console.log(rows);
-      res.set('Access-Control-Allow-Origin', '*');
       res.end(JSON.stringify(rows));
     })
 
@@ -150,7 +108,6 @@ app.get('/prodlist', function(req, res) {
       console.log('DB fetch success for /itemdetail/id');
 
       //console.log(rows);
-      res.set('Access-Control-Allow-Origin', '*');
       res.render('itemdetail.ejs', { itemdetail: rows });
     })
 
@@ -173,35 +130,7 @@ app.get('/prodlist', function(req, res) {
 
   })
 
-  /* API action: Search - Watson STT token authorization */
-  /* .get('/speech-to-text/token', function(req, res) {
-
-      console.log(config);
-      var methodName = 'stt_token';
-      // The following three lines translate the curl request provided by IBM into a nodeJS request format so that the token can be retrieved by your server code. 
-      var form = { grant_type: 'urn:ibm:params:oauth:grant-type:apikey', apikey: 'GDXKQLE05OparJvsTJL5fDbnGYjeAglVwd_S4W5IG4OS' }
-      //config.speech_to_text.apikey }
-      var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' };
-      var options = { url: 'https://iam.cloud.ibm.com/identity/token', method: 'POST', form: form, headers: headers };
-      
-      // get the new token
-      request(options, function (error, response, body) 
-      {
-          if (!error && response.statusCode == 200) {
-          // send the token back as the 'success' item in the returned json object
-            res.set('Access-Control-Allow-Origin', '*');
-            res.send({success: JSON.parse(body).access_token}); 
-          }
-          else {
-          // send the failure message back as the 'failed' item in the returned json object.
-            console.log(methodName+' error: ', error); 
-            res.set('Access-Control-Allow-Origin', '*');
-            res.send({failed: error.message}) 
-          }
-      });
-  })*/
-
-
+  
   /* API action: All Item details Under a Commodity */
   .get('/commodity/:id', function(req, res) {
 
@@ -246,7 +175,7 @@ app.get('/prodlist', function(req, res) {
       console.log('DB fetch success for /families');
 
       //console.log(rows);
-      res.set('Access-Control-Allow-Origin', '*');
+      
       res.end(JSON.stringify(rows));
     })
 
@@ -264,7 +193,6 @@ app.get('/prodlist', function(req, res) {
       console.log('DB fetch success for /segments/id/families');
 
       //console.log(rows);
-      res.set('Access-Control-Allow-Origin', '*');
       res.end(JSON.stringify(rows));
     })
 
@@ -282,7 +210,6 @@ app.get('/prodlist', function(req, res) {
       console.log('DB fetch success for /segments/id/families');
 
       //console.log(rows);
-      res.set('Access-Control-Allow-Origin', '*');
       res.end(JSON.stringify(rows));
     })
 
@@ -299,7 +226,6 @@ app.get('/prodlist', function(req, res) {
       console.log('DB fetch success for /segments/id/families/id/classes');
 
       //console.log(rows);
-      res.set('Access-Control-Allow-Origin', '*');
       res.end(JSON.stringify(rows));
     })
 
@@ -317,7 +243,6 @@ app.get('/prodlist', function(req, res) {
       console.log('DB fetch success for /family/id/classes');
 
       //console.log(rows);
-      res.set('Access-Control-Allow-Origin', '*');
       res.end(JSON.stringify(rows));
     })
 
@@ -351,7 +276,6 @@ app.get('/prodlist', function(req, res) {
       console.log('DB fetch success for /segments/id/families/id/classes');
 
       //console.log(rows);
-      res.set('Access-Control-Allow-Origin', '*');
       res.end(JSON.stringify(rows));
     })
 
