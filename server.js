@@ -102,7 +102,7 @@ app.get('/prodlist', function(req, res) {
   /* API action: Item details based on ITEM_NUMBER */
   .get('/itemdetail/:id', function(req, res) {
 
-    let sqlQuery = "Select   a.ITEM_NUMBER sku_ITEM_NUMBER,   a.DESCRIPTION sku_DESCRIPTION,   a.LONG_DESCRIPTION sku_LONG_DESCRIPTION,   a.CATALOGUE_CATEGORY sku_CATALOGUE_CATEGORY,   a.SKU_UNIT_OF_MEASURE sku_SKU_UNIT_OF_MEASURE,   a.STYLE_ITEM sku_STYLE_ITEM,   a.SKU_ATTRIBUTE1 sku_SKU_ATTRIBUTE1,   a.SKU_ATTRIBUTE2 sku_SKU_ATTRIBUTE2,   a.SKU_ATTRIBUTE3 sku_SKU_ATTRIBUTE3,   a.SKU_ATTRIBUTE4 sku_SKU_ATTRIBUTE4,   a.SKU_ATTRIBUTE5 sku_SKU_ATTRIBUTE5,   a.SKU_ATTRIBUTE6 sku_SKU_ATTRIBUTE6,   a.SKU_ATTRIBUTE_VALUE1 sku_SKU_ATTRIBUTE_VALUE1,   a.SKU_ATTRIBUTE_VALUE2 sku_SKU_ATTRIBUTE_VALUE2,   a.SKU_ATTRIBUTE_VALUE3 sku_SKU_ATTRIBUTE_VALUE3,   a.SKU_ATTRIBUTE_VALUE4 sku_SKU_ATTRIBUTE_VALUE4,   a.SKU_ATTRIBUTE_VALUE5 sku_SKU_ATTRIBUTE_VALUE5,   a.SKU_ATTRIBUTE_VALUE6 sku_SKU_ATTRIBUTE_VALUE6,   b.SEGMENT cat_Segment,   b.SEGMENT_NAME cat_SEGMENT_NAME,   b.FAMILY cat_Family,   b.FAMILY_NAME cat_FAMILY_NAME,   b.CLASS cat_Class,   b.CLASS_NAME cat_CLASS_NAME,   b.COMMODITY_NAME cat_COMMODITY_NAME,   c.DESCRIPTION sty_DESCRIPTION,   c.LONG_DESCRIPTION sty_LONG_DESCRIPTION,   c.BRAND sty_BRAND,   p.PRICE_ID prc_PRICE_ID,   p.LIST_PRICE prc_LIST_PRICE,   p.DISCOUNT prc_DISCOUNT,   p.IN_STOCK prc_IN_STOCK,   p.PRICE_EFFECTIVE_DATE prc_PRICE_EFFECTIVE_DATE from   " + dbschema + ".XXIBM_PRODUCT_SKU a  inner join " + dbschema + ".XXIBM_PRODUCT_CATALOG b  on a.CATALOGUE_CATEGORY = b.COMMODITY inner join " + dbschema + ".XXIBM_PRODUCT_STYLE c  on a.STYLE_ITEM = c.ITEM_NUMBER left outer join " + dbschema + ".XXIBM_PRODUCT_PRICING p  on a.ITEM_NUMBER = p.ITEM_NUMBER where a.ITEM_NUMBER = ?";
+    let sqlQuery = "Select   a.ITEM_NUMBER sku_ITEM_NUMBER,   a.DESCRIPTION sku_DESCRIPTION,   a.LONG_DESCRIPTION sku_LONG_DESCRIPTION,   a.CATALOGUE_CATEGORY sku_CATALOGUE_CATEGORY,   a.SKU_UNIT_OF_MEASURE sku_SKU_UNIT_OF_MEASURE,   a.STYLE_ITEM sku_STYLE_ITEM,   a.SKU_ATTRIBUTE1 sku_SKU_ATTRIBUTE1,   a.SKU_ATTRIBUTE2 sku_SKU_ATTRIBUTE2,   a.SKU_ATTRIBUTE3 sku_SKU_ATTRIBUTE3,   a.SKU_ATTRIBUTE4 sku_SKU_ATTRIBUTE4,   a.SKU_ATTRIBUTE5 sku_SKU_ATTRIBUTE5,   a.SKU_ATTRIBUTE6 sku_SKU_ATTRIBUTE6,   a.SKU_ATTRIBUTE_VALUE1 sku_SKU_ATTRIBUTE_VALUE1,   a.SKU_ATTRIBUTE_VALUE2 sku_SKU_ATTRIBUTE_VALUE2,   a.SKU_ATTRIBUTE_VALUE3 sku_SKU_ATTRIBUTE_VALUE3,   a.SKU_ATTRIBUTE_VALUE4 sku_SKU_ATTRIBUTE_VALUE4,   a.SKU_ATTRIBUTE_VALUE5 sku_SKU_ATTRIBUTE_VALUE5,   a.SKU_ATTRIBUTE_VALUE6 sku_SKU_ATTRIBUTE_VALUE6,   b.SEGMENT cat_Segment,   b.SEGMENT_NAME cat_SEGMENT_NAME,   b.FAMILY cat_Family,   b.FAMILY_NAME cat_FAMILY_NAME,   b.CLASS cat_Class,   b.CLASS_NAME cat_CLASS_NAME,   b.COMMODITY_NAME cat_COMMODITY_NAME,   c.DESCRIPTION sty_DESCRIPTION,   c.LONG_DESCRIPTION sty_LONG_DESCRIPTION,   c.BRAND sty_BRAND,   p.PRICE_ID prc_PRICE_ID,   p.LIST_PRICE prc_LIST_PRICE,   p.DISCOUNT prc_DISCOUNT,   p.IN_STOCK prc_IN_STOCK,   p.PRICE_EFFECTIVE_DATE prc_PRICE_EFFECTIVE_DATE from   " + dbschema + ".XXIBM_PRODUCT_SKU a  inner join " + dbschema + ".XXIBM_PRODUCT_CATALOGUE b  on a.CATALOGUE_CATEGORY = b.COMMODITY inner join " + dbschema + ".XXIBM_PRODUCT_STYLE c  on a.STYLE_ITEM = c.ITEM_NUMBER left outer join " + dbschema + ".XXIBM_PRODUCT_PRICING p  on a.ITEM_NUMBER = p.ITEM_NUMBER where a.ITEM_NUMBER = ?";
 
     global.dbconn.query(sqlQuery, [req.params.id], function(err, rows, fields) {
       if (err) throw err;
@@ -119,7 +119,7 @@ app.get('/prodlist', function(req, res) {
   /* API action: DEBUG - Item details based on ITEM_NUMBER */
   .get('/itemdetail_show/:id', function(req, res) {
 
-    let sqlQuery = "Select   a.ITEM_NUMBER sku_ITEM_NUMBER,   a.DESCRIPTION sku_DESCRIPTION,   a.LONG_DESCRIPTION sku_LONG_DESCRIPTION,   a.CATALOGUE_CATEGORY sku_CATALOGUE_CATEGORY,   a.SKU_UNIT_OF_MEASURE sku_SKU_UNIT_OF_MEASURE,   a.STYLE_ITEM sku_STYLE_ITEM,   a.SKU_ATTRIBUTE1 sku_SKU_ATTRIBUTE1,   a.SKU_ATTRIBUTE2 sku_SKU_ATTRIBUTE2,   a.SKU_ATTRIBUTE3 sku_SKU_ATTRIBUTE3,   a.SKU_ATTRIBUTE4 sku_SKU_ATTRIBUTE4,   a.SKU_ATTRIBUTE5 sku_SKU_ATTRIBUTE5,   a.SKU_ATTRIBUTE6 sku_SKU_ATTRIBUTE6,   a.SKU_ATTRIBUTE_VALUE1 sku_SKU_ATTRIBUTE_VALUE1,   a.SKU_ATTRIBUTE_VALUE2 sku_SKU_ATTRIBUTE_VALUE2,   a.SKU_ATTRIBUTE_VALUE3 sku_SKU_ATTRIBUTE_VALUE3,   a.SKU_ATTRIBUTE_VALUE4 sku_SKU_ATTRIBUTE_VALUE4,   a.SKU_ATTRIBUTE_VALUE5 sku_SKU_ATTRIBUTE_VALUE5,   a.SKU_ATTRIBUTE_VALUE6 sku_SKU_ATTRIBUTE_VALUE6,   b.SEGMENT cat_Segment,   b.SEGMENT_NAME cat_SEGMENT_NAME,   b.FAMILY cat_Family,   b.FAMILY_NAME cat_FAMILY_NAME,   b.CLASS cat_Class,   b.CLASS_NAME cat_CLASS_NAME,   b.COMMODITY_NAME cat_COMMODITY_NAME,   c.DESCRIPTION sty_DESCRIPTION,   c.LONG_DESCRIPTION sty_LONG_DESCRIPTION,   c.BRAND sty_BRAND,   p.PRICE_ID prc_PRICE_ID,   p.LIST_PRICE prc_LIST_PRICE,   p.DISCOUNT prc_DISCOUNT,   p.IN_STOCK prc_IN_STOCK,   p.PRICE_EFFECTIVE_DATE prc_PRICE_EFFECTIVE_DATE from   " + dbschema + ".XXIBM_PRODUCT_SKU a  inner join " + dbschema + ".XXIBM_PRODUCT_CATALOG b  on a.CATALOGUE_CATEGORY = b.COMMODITY inner join " + dbschema + ".XXIBM_PRODUCT_STYLE c  on a.STYLE_ITEM = c.ITEM_NUMBER left outer join " + dbschema + ".XXIBM_PRODUCT_PRICING p  on a.ITEM_NUMBER = p.ITEM_NUMBER where a.ITEM_NUMBER = ?";
+    let sqlQuery = "Select   a.ITEM_NUMBER sku_ITEM_NUMBER,   a.DESCRIPTION sku_DESCRIPTION,   a.LONG_DESCRIPTION sku_LONG_DESCRIPTION,   a.CATALOGUE_CATEGORY sku_CATALOGUE_CATEGORY,   a.SKU_UNIT_OF_MEASURE sku_SKU_UNIT_OF_MEASURE,   a.STYLE_ITEM sku_STYLE_ITEM,   a.SKU_ATTRIBUTE1 sku_SKU_ATTRIBUTE1,   a.SKU_ATTRIBUTE2 sku_SKU_ATTRIBUTE2,   a.SKU_ATTRIBUTE3 sku_SKU_ATTRIBUTE3,   a.SKU_ATTRIBUTE4 sku_SKU_ATTRIBUTE4,   a.SKU_ATTRIBUTE5 sku_SKU_ATTRIBUTE5,   a.SKU_ATTRIBUTE6 sku_SKU_ATTRIBUTE6,   a.SKU_ATTRIBUTE_VALUE1 sku_SKU_ATTRIBUTE_VALUE1,   a.SKU_ATTRIBUTE_VALUE2 sku_SKU_ATTRIBUTE_VALUE2,   a.SKU_ATTRIBUTE_VALUE3 sku_SKU_ATTRIBUTE_VALUE3,   a.SKU_ATTRIBUTE_VALUE4 sku_SKU_ATTRIBUTE_VALUE4,   a.SKU_ATTRIBUTE_VALUE5 sku_SKU_ATTRIBUTE_VALUE5,   a.SKU_ATTRIBUTE_VALUE6 sku_SKU_ATTRIBUTE_VALUE6,   b.SEGMENT cat_Segment,   b.SEGMENT_NAME cat_SEGMENT_NAME,   b.FAMILY cat_Family,   b.FAMILY_NAME cat_FAMILY_NAME,   b.CLASS cat_Class,   b.CLASS_NAME cat_CLASS_NAME,   b.COMMODITY_NAME cat_COMMODITY_NAME,   c.DESCRIPTION sty_DESCRIPTION,   c.LONG_DESCRIPTION sty_LONG_DESCRIPTION,   c.BRAND sty_BRAND,   p.PRICE_ID prc_PRICE_ID,   p.LIST_PRICE prc_LIST_PRICE,   p.DISCOUNT prc_DISCOUNT,   p.IN_STOCK prc_IN_STOCK,   p.PRICE_EFFECTIVE_DATE prc_PRICE_EFFECTIVE_DATE from   " + dbschema + ".XXIBM_PRODUCT_SKU a  inner join " + dbschema + ".XXIBM_PRODUCT_CATALOGUE b  on a.CATALOGUE_CATEGORY = b.COMMODITY inner join " + dbschema + ".XXIBM_PRODUCT_STYLE c  on a.STYLE_ITEM = c.ITEM_NUMBER left outer join " + dbschema + ".XXIBM_PRODUCT_PRICING p  on a.ITEM_NUMBER = p.ITEM_NUMBER where a.ITEM_NUMBER = ?";
 
     global.dbconn.query(sqlQuery, [req.params.id], function(err, rows, fields) {
       if (err) throw err;
@@ -174,7 +174,7 @@ app.get('/prodlist', function(req, res) {
       res.end(JSON.stringify(r));
     }
 
-    let sqlQuery = "Select count(1) as cnt from " + dbschema + ".XXIBM_PRODUCT_SKU a  inner join " + dbschema + ".XXIBM_PRODUCT_CATALOG b  on a.CATALOGUE_CATEGORY = b.COMMODITY inner join " + dbschema + ".XXIBM_PRODUCT_STYLE c  on a.STYLE_ITEM = c.ITEM_NUMBER left outer join " + dbschema + ".XXIBM_PRODUCT_PRICING p  on a.ITEM_NUMBER = p.ITEM_NUMBER where a.DESCRIPTION like '%" + req.params.q + "%' or a.LONG_DESCRIPTION like '%" + req.params.q + "%'";
+    let sqlQuery = "Select count(1) as cnt from " + dbschema + ".XXIBM_PRODUCT_SKU a  inner join " + dbschema + ".XXIBM_PRODUCT_CATALOGUE b  on a.CATALOGUE_CATEGORY = b.COMMODITY inner join " + dbschema + ".XXIBM_PRODUCT_STYLE c  on a.STYLE_ITEM = c.ITEM_NUMBER left outer join " + dbschema + ".XXIBM_PRODUCT_PRICING p  on a.ITEM_NUMBER = p.ITEM_NUMBER where a.DESCRIPTION like '%" + req.params.q + "%' or a.LONG_DESCRIPTION like '%" + req.params.q + "%'";
 
     global.dbconn.query(sqlQuery, function(err, rows, fields) {
       if (err) throw err;
@@ -188,7 +188,7 @@ app.get('/prodlist', function(req, res) {
       }
     });
 
-    sqlQuery = "Select   a.ITEM_NUMBER sku_ITEM_NUMBER,   a.DESCRIPTION sku_DESCRIPTION,   a.LONG_DESCRIPTION sku_LONG_DESCRIPTION,   a.CATALOGUE_CATEGORY sku_CATALOGUE_CATEGORY,   a.SKU_UNIT_OF_MEASURE sku_SKU_UNIT_OF_MEASURE,   a.STYLE_ITEM sku_STYLE_ITEM, a.SKU_ATTRIBUTE_VALUE1 sku_SKU_ATTRIBUTE_VALUE1,   a.SKU_ATTRIBUTE_VALUE2 sku_SKU_ATTRIBUTE_VALUE2,   a.SKU_ATTRIBUTE_VALUE3 sku_SKU_ATTRIBUTE_VALUE3,   a.SKU_ATTRIBUTE_VALUE4 sku_SKU_ATTRIBUTE_VALUE4,   a.SKU_ATTRIBUTE_VALUE5 sku_SKU_ATTRIBUTE_VALUE5,   a.SKU_ATTRIBUTE_VALUE6 sku_SKU_ATTRIBUTE_VALUE6,   b.SEGMENT cat_Segment,   b.SEGMENT_NAME cat_SEGMENT_NAME,   b.FAMILY cat_Family,   b.FAMILY_NAME cat_FAMILY_NAME,   b.CLASS cat_Class,   b.CLASS_NAME cat_CLASS_NAME,   b.COMMODITY_NAME cat_COMMODITY_NAME,   c.DESCRIPTION sty_DESCRIPTION,   c.LONG_DESCRIPTION sty_LONG_DESCRIPTION,   c.BRAND sty_BRAND,   p.PRICE_ID prc_PRICE_ID,   p.LIST_PRICE prc_LIST_PRICE,   p.DISCOUNT prc_DISCOUNT,   p.IN_STOCK prc_IN_STOCK,   p.PRICE_EFFECTIVE_DATE prc_PRICE_EFFECTIVE_DATE from   " + dbschema + ".XXIBM_PRODUCT_SKU a  inner join " + dbschema + ".XXIBM_PRODUCT_CATALOG b  on a.CATALOGUE_CATEGORY = b.COMMODITY inner join " + dbschema + ".XXIBM_PRODUCT_STYLE c  on a.STYLE_ITEM = c.ITEM_NUMBER left outer join " + dbschema + ".XXIBM_PRODUCT_PRICING p  on a.ITEM_NUMBER = p.ITEM_NUMBER where a.DESCRIPTION like '%" + req.params.q + "%' or a.LONG_DESCRIPTION like '%" + req.params.q + "%' ORDER By cat_COMMODITY_NAME, sty_DESCRIPTION LIMIT ? OFFSET ?";
+    sqlQuery = "Select   a.ITEM_NUMBER sku_ITEM_NUMBER,   a.DESCRIPTION sku_DESCRIPTION,   a.LONG_DESCRIPTION sku_LONG_DESCRIPTION,   a.CATALOGUE_CATEGORY sku_CATALOGUE_CATEGORY,   a.SKU_UNIT_OF_MEASURE sku_SKU_UNIT_OF_MEASURE,   a.STYLE_ITEM sku_STYLE_ITEM, a.SKU_ATTRIBUTE_VALUE1 sku_SKU_ATTRIBUTE_VALUE1,   a.SKU_ATTRIBUTE_VALUE2 sku_SKU_ATTRIBUTE_VALUE2,   a.SKU_ATTRIBUTE_VALUE3 sku_SKU_ATTRIBUTE_VALUE3,   a.SKU_ATTRIBUTE_VALUE4 sku_SKU_ATTRIBUTE_VALUE4,   a.SKU_ATTRIBUTE_VALUE5 sku_SKU_ATTRIBUTE_VALUE5,   a.SKU_ATTRIBUTE_VALUE6 sku_SKU_ATTRIBUTE_VALUE6,   b.SEGMENT cat_Segment,   b.SEGMENT_NAME cat_SEGMENT_NAME,   b.FAMILY cat_Family,   b.FAMILY_NAME cat_FAMILY_NAME,   b.CLASS cat_Class,   b.CLASS_NAME cat_CLASS_NAME,   b.COMMODITY_NAME cat_COMMODITY_NAME,   c.DESCRIPTION sty_DESCRIPTION,   c.LONG_DESCRIPTION sty_LONG_DESCRIPTION,   c.BRAND sty_BRAND,   p.PRICE_ID prc_PRICE_ID,   p.LIST_PRICE prc_LIST_PRICE,   p.DISCOUNT prc_DISCOUNT,   p.IN_STOCK prc_IN_STOCK,   p.PRICE_EFFECTIVE_DATE prc_PRICE_EFFECTIVE_DATE from   " + dbschema + ".XXIBM_PRODUCT_SKU a  inner join " + dbschema + ".XXIBM_PRODUCT_CATALOGUE b  on a.CATALOGUE_CATEGORY = b.COMMODITY inner join " + dbschema + ".XXIBM_PRODUCT_STYLE c  on a.STYLE_ITEM = c.ITEM_NUMBER left outer join " + dbschema + ".XXIBM_PRODUCT_PRICING p  on a.ITEM_NUMBER = p.ITEM_NUMBER where a.DESCRIPTION like '%" + req.params.q + "%' or a.LONG_DESCRIPTION like '%" + req.params.q + "%' ORDER By cat_COMMODITY_NAME, sty_DESCRIPTION LIMIT ? OFFSET ?";
 
 
     global.dbconn.query(sqlQuery, [limit, offset], function(err, rows, fields) {
@@ -222,7 +222,7 @@ app.get('/prodlist', function(req, res) {
   /* API action: All Item details Under a COMMODITY */
   .get('/COMMODITY/:id', function(req, res) {
 
-    let sqlQuery = "Select   a.ITEM_NUMBER sku_ITEM_NUMBER,   a.DESCRIPTION sku_DESCRIPTION,   a.LONG_DESCRIPTION sku_LONG_DESCRIPTION,   a.CATALOGUE_CATEGORY sku_CATALOGUE_CATEGORY,   a.SKU_UNIT_OF_MEASURE sku_SKU_UNIT_OF_MEASURE,   a.STYLE_ITEM sku_STYLE_ITEM,   a.SKU_ATTRIBUTE1 sku_SKU_ATTRIBUTE1,   a.SKU_ATTRIBUTE2 sku_SKU_ATTRIBUTE2,   a.SKU_ATTRIBUTE3 sku_SKU_ATTRIBUTE3,   a.SKU_ATTRIBUTE4 sku_SKU_ATTRIBUTE4,   a.SKU_ATTRIBUTE5 sku_SKU_ATTRIBUTE5,   a.SKU_ATTRIBUTE6 sku_SKU_ATTRIBUTE6,   a.SKU_ATTRIBUTE_VALUE1 sku_SKU_ATTRIBUTE_VALUE1,   a.SKU_ATTRIBUTE_VALUE2 sku_SKU_ATTRIBUTE_VALUE2,   a.SKU_ATTRIBUTE_VALUE3 sku_SKU_ATTRIBUTE_VALUE3,   a.SKU_ATTRIBUTE_VALUE4 sku_SKU_ATTRIBUTE_VALUE4,   a.SKU_ATTRIBUTE_VALUE5 sku_SKU_ATTRIBUTE_VALUE5,   a.SKU_ATTRIBUTE_VALUE6 sku_SKU_ATTRIBUTE_VALUE6,   b.SEGMENT cat_Segment,   b.SEGMENT_NAME cat_SEGMENT_NAME,   b.FAMILY cat_Family,   b.FAMILY_NAME cat_FAMILY_NAME,   b.CLASS cat_Class,   b.CLASS_NAME cat_CLASS_NAME,   b.COMMODITY_NAME cat_COMMODITY_NAME,   c.DESCRIPTION sty_DESCRIPTION,   c.LONG_DESCRIPTION sty_LONG_DESCRIPTION,   c.BRAND sty_BRAND,   p.PRICE_ID prc_PRICE_ID,   p.LIST_PRICE prc_LIST_PRICE,   p.DISCOUNT prc_DISCOUNT,   p.IN_STOCK prc_IN_STOCK,   p.PRICE_EFFECTIVE_DATE prc_PRICE_EFFECTIVE_DATE from   " + dbschema + ".XXIBM_PRODUCT_SKU a  inner join " + dbschema + ".XXIBM_PRODUCT_CATALOG b  on a.CATALOGUE_CATEGORY = b.COMMODITY inner join " + dbschema + ".XXIBM_PRODUCT_STYLE c  on a.STYLE_ITEM = c.ITEM_NUMBER left outer join " + dbschema + ".XXIBM_PRODUCT_PRICING p  on a.ITEM_NUMBER = p.ITEM_NUMBER where a.CATALOGUE_CATEGORY = ?";
+    let sqlQuery = "Select   a.ITEM_NUMBER sku_ITEM_NUMBER,   a.DESCRIPTION sku_DESCRIPTION,   a.LONG_DESCRIPTION sku_LONG_DESCRIPTION,   a.CATALOGUE_CATEGORY sku_CATALOGUE_CATEGORY,   a.SKU_UNIT_OF_MEASURE sku_SKU_UNIT_OF_MEASURE,   a.STYLE_ITEM sku_STYLE_ITEM,   a.SKU_ATTRIBUTE1 sku_SKU_ATTRIBUTE1,   a.SKU_ATTRIBUTE2 sku_SKU_ATTRIBUTE2,   a.SKU_ATTRIBUTE3 sku_SKU_ATTRIBUTE3,   a.SKU_ATTRIBUTE4 sku_SKU_ATTRIBUTE4,   a.SKU_ATTRIBUTE5 sku_SKU_ATTRIBUTE5,   a.SKU_ATTRIBUTE6 sku_SKU_ATTRIBUTE6,   a.SKU_ATTRIBUTE_VALUE1 sku_SKU_ATTRIBUTE_VALUE1,   a.SKU_ATTRIBUTE_VALUE2 sku_SKU_ATTRIBUTE_VALUE2,   a.SKU_ATTRIBUTE_VALUE3 sku_SKU_ATTRIBUTE_VALUE3,   a.SKU_ATTRIBUTE_VALUE4 sku_SKU_ATTRIBUTE_VALUE4,   a.SKU_ATTRIBUTE_VALUE5 sku_SKU_ATTRIBUTE_VALUE5,   a.SKU_ATTRIBUTE_VALUE6 sku_SKU_ATTRIBUTE_VALUE6,   b.SEGMENT cat_Segment,   b.SEGMENT_NAME cat_SEGMENT_NAME,   b.FAMILY cat_Family,   b.FAMILY_NAME cat_FAMILY_NAME,   b.CLASS cat_Class,   b.CLASS_NAME cat_CLASS_NAME,   b.COMMODITY_NAME cat_COMMODITY_NAME,   c.DESCRIPTION sty_DESCRIPTION,   c.LONG_DESCRIPTION sty_LONG_DESCRIPTION,   c.BRAND sty_BRAND,   p.PRICE_ID prc_PRICE_ID,   p.LIST_PRICE prc_LIST_PRICE,   p.DISCOUNT prc_DISCOUNT,   p.IN_STOCK prc_IN_STOCK,   p.PRICE_EFFECTIVE_DATE prc_PRICE_EFFECTIVE_DATE from   " + dbschema + ".XXIBM_PRODUCT_SKU a  inner join " + dbschema + ".XXIBM_PRODUCT_CATALOGUE b  on a.CATALOGUE_CATEGORY = b.COMMODITY inner join " + dbschema + ".XXIBM_PRODUCT_STYLE c  on a.STYLE_ITEM = c.ITEM_NUMBER left outer join " + dbschema + ".XXIBM_PRODUCT_PRICING p  on a.ITEM_NUMBER = p.ITEM_NUMBER where a.CATALOGUE_CATEGORY = ?";
 
     global.dbconn.query(sqlQuery, [req.params.id], function(err, rows, fields) {
       if (err) throw err;
@@ -239,7 +239,7 @@ app.get('/prodlist', function(req, res) {
   /* API action: Segment List */
   .get('/segments', function(req, res) {
 
-    let sqlQuery = "Select distinct SEGMENT_NAME from " + dbschema + ".XXIBM_PRODUCT_CATALOG";
+    let sqlQuery = "Select distinct SEGMENT_NAME from " + dbschema + ".XXIBM_PRODUCT_CATALOGUE";
 
     global.dbconn.query(sqlQuery, function(err, rows, fields) {
       if (err) throw err;
@@ -255,7 +255,7 @@ app.get('/prodlist', function(req, res) {
   /* API action: Family List ALL */
   .get('/families', function(req, res) {
 
-    let sqlQuery = "Select distinct FAMILY, FAMILY_NAME from " + dbschema + ".XXIBM_PRODUCT_CATALOG";
+    let sqlQuery = "Select distinct FAMILY, FAMILY_NAME from " + dbschema + ".XXIBM_PRODUCT_CATALOGUE";
 
     global.dbconn.query(sqlQuery, function(err, rows, fields) {
       if (err) throw err;
@@ -273,7 +273,7 @@ app.get('/prodlist', function(req, res) {
   /* API action: Get Family, Class and COMMODITY */
   .get('/segment/:seg/families', function(req, res) {
 
-    let sqlQuery = "Select distinct SEGMENT_NAME, FAMILY_NAME from " + dbschema + ".XXIBM_PRODUCT_CATALOG where SEGMENT = ?";
+    let sqlQuery = "Select distinct SEGMENT_NAME, FAMILY_NAME from " + dbschema + ".XXIBM_PRODUCT_CATALOGUE where SEGMENT = ?";
 
     global.dbconn.query(sqlQuery, [req.params.seg], function(err, rows, fields) {
       if (err) throw err;
@@ -290,7 +290,7 @@ app.get('/prodlist', function(req, res) {
   /* API action: Family List per Segment */
   .get('/segment/:seg/families', function(req, res) {
 
-    let sqlQuery = "Select distinct SEGMENT_NAME, FAMILY_NAME from " + dbschema + ".XXIBM_PRODUCT_CATALOG where SEGMENT = ?";
+    let sqlQuery = "Select distinct SEGMENT_NAME, FAMILY_NAME from " + dbschema + ".XXIBM_PRODUCT_CATALOGUE where SEGMENT = ?";
 
     global.dbconn.query(sqlQuery, [req.params.seg], function(err, rows, fields) {
       if (err) throw err;
@@ -306,7 +306,7 @@ app.get('/prodlist', function(req, res) {
   /* API action: Class List per Segment and Family */
   .get('/segment/:seg/family/:fam/classes', function(req, res) {
 
-    let sqlQuery = "Select distinct SEGMENT_NAME, FAMILY_NAME, CLASS_NAME from " + dbschema + ".XXIBM_PRODUCT_CATALOG where SEGMENT = ? and FAMILY = ?";
+    let sqlQuery = "Select distinct SEGMENT_NAME, FAMILY_NAME, CLASS_NAME from " + dbschema + ".XXIBM_PRODUCT_CATALOGUE where SEGMENT = ? and FAMILY = ?";
 
     global.dbconn.query(sqlQuery, [req.params.seg, req.params.fam], function(err, rows, fields) {
       if (err) throw err;
@@ -323,7 +323,7 @@ app.get('/prodlist', function(req, res) {
   /* API action: Class List per Family */
   .get('/family/:fam/classes', function(req, res) {
 
-    let sqlQuery = "Select distinct FAMILY_NAME, CLASS_NAME from " + dbschema + ".XXIBM_PRODUCT_CATALOG where FAMILY = ?";
+    let sqlQuery = "Select distinct FAMILY_NAME, CLASS_NAME from " + dbschema + ".XXIBM_PRODUCT_CATALOGUE where FAMILY = ?";
 
     global.dbconn.query(sqlQuery, [req.params.fam], function(err, rows, fields) {
       if (err) throw err;
@@ -340,7 +340,7 @@ app.get('/prodlist', function(req, res) {
    /* API action: All Classes */
   .get('/classes', function(req, res) {
 
-    let sqlQuery = "Select distinct CLASS, CLASS_NAME, FAMILY, FAMILY_NAME from " + dbschema + ".XXIBM_PRODUCT_CATALOG order by FAMILY_NAME, CLASS_NAME";
+    let sqlQuery = "Select distinct CLASS, CLASS_NAME, FAMILY, FAMILY_NAME from " + dbschema + ".XXIBM_PRODUCT_CATALOGUE order by FAMILY_NAME, CLASS_NAME";
 
     global.dbconn.query(sqlQuery, function(err, rows, fields) {
       if (err) throw err;
@@ -357,7 +357,7 @@ app.get('/prodlist', function(req, res) {
   /* API action: COMMODITY List per class */
   .get('/class/:cls/comm', function(req, res) {
 
-    let sqlQuery = "Select distinct COMMODITY, COMMODITY_NAME from " + dbschema + ".XXIBM_PRODUCT_CATALOG where CLASS = ? order by COMMODITY_NAME";
+    let sqlQuery = "Select distinct COMMODITY, COMMODITY_NAME from " + dbschema + ".XXIBM_PRODUCT_CATALOGUE where CLASS = ? order by COMMODITY_NAME";
 
     global.dbconn.query(sqlQuery, [req.params.cls], function(err, rows, fields) {
       if (err) throw err;
@@ -373,7 +373,7 @@ app.get('/prodlist', function(req, res) {
   /* API action: COMMODITY List per Segment, Family and class */
   .get('/segment/:seg/family/:fam/class/:cls/commodities', function(req, res) {
 
-    let sqlQuery = "Select distinct SEGMENT_NAME, FAMILY_NAME, CLASS_NAME, COMMODITY_NAME from " + dbschema + ".XXIBM_PRODUCT_CATALOG where SEGMENT = ? and FAMILY = ? and CLASS = ?";
+    let sqlQuery = "Select distinct SEGMENT_NAME, FAMILY_NAME, CLASS_NAME, COMMODITY_NAME from " + dbschema + ".XXIBM_PRODUCT_CATALOGUE where SEGMENT = ? and FAMILY = ? and CLASS = ?";
 
     global.dbconn.query(sqlQuery, [req.params.seg, req.params.fam, req.params.cls], function(err, rows, fields) {
       if (err) throw err;
@@ -390,7 +390,7 @@ app.get('/prodlist', function(req, res) {
   /* API action: Search by all */
   .get('/segment/:seg/family/:fam/classes', function(req, res) {
 
-    let sqlQuery = "Select distinct SEGMENT_NAME, FAMILY_NAME, CLASS_NAME from " + dbschema + ".XXIBM_PRODUCT_CATALOG where SEGMENT = ? and FAMILY = ?";
+    let sqlQuery = "Select distinct SEGMENT_NAME, FAMILY_NAME, CLASS_NAME from " + dbschema + ".XXIBM_PRODUCT_CATALOGUE where SEGMENT = ? and FAMILY = ?";
 
     global.dbconn.query(sqlQuery, [req.params.seg, req.params.fam], function(err, rows, fields) {
       if (err) throw err;
@@ -581,7 +581,7 @@ app.get('/prodlist', function(req, res) {
 
   /* API action: Full Hierarchy - Segment -> family -> Class -> Commodities */
   /*.get('/prodhtree', function(req, res) {
-    let sqlQuery = "Select distinct SEGMENT_NAME, FAMILY_NAME, CLASS_NAME, COMMODITY_NAME from " + dbschema + ".XXIBM_PRODUCT_CATALOG order by 1,2,3,4";
+    let sqlQuery = "Select distinct SEGMENT_NAME, FAMILY_NAME, CLASS_NAME, COMMODITY_NAME from " + dbschema + ".XXIBM_PRODUCT_CATALOGUE order by 1,2,3,4";
     global.dbconn.query(sqlQuery, function(err, rows, fields) {
       if (err) throw err;
       console.log('DB fetch success for /segments/id/families/id/classes'); 
