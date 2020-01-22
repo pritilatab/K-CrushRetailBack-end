@@ -367,24 +367,24 @@ app.get('/getstttoken', function(req, res) {
       res.end(JSON.stringify(r));
     }
 
-    //get the parts of the search string
-    let srchArr = srch_str.split(" "); 
-
     let sqlPartSrc = "";
 
     if (srch_str.toUpperCase() != 'ALL') {
+	
+		//get the parts of the search string
+		let srchArr = srch_str.split(" "); 
       
-      sqlPartSrc += " where ";
+		sqlPartSrc += " where ";
 
-      srchArr.forEach(function(item, index){
+		srchArr.forEach(function(item, index){
 
-        sqlPartSrc += " (a.Description like '%" + item + "%' or a.Long_Description like '%" + item + "%' or b.Commodity_Name like '%" + item + "%' or b.Class_Name like '%" + item + "%' or c.Brand like '%" + item + "%' or a.SKU_ATTRIBUTE_VALUE1 like '%" + item + "%' or a.SKU_ATTRIBUTE_VALUE2 like '%" + item + "%' or a.SKU_ATTRIBUTE_VALUE3 like '%" + item + "%' or a.SKU_ATTRIBUTE_VALUE4 like '%" + item + "%' or a.SKU_ATTRIBUTE_VALUE5 like '%" + item + "%' or a.SKU_ATTRIBUTE_VALUE6 like '%" + item + "%')" + 
+        sqlPartSrc += " (a.Description like '%" + item + "%' or a.Long_Description like '%" + item + "%' or b.Commodity_Name like '%" + item + "%' or b.Class_Name like '%" + item + "%' or s.Brand like '%" + item + "%' or a.SKU_ATTRIBUTE_VALUE1 like '%" + item + "%' or a.SKU_ATTRIBUTE_VALUE2 like '%" + item + "%' or a.SKU_ATTRIBUTE_VALUE3 like '%" + item + "%' or a.SKU_ATTRIBUTE_VALUE4 like '%" + item + "%' or a.SKU_ATTRIBUTE_VALUE5 like '%" + item + "%' or a.SKU_ATTRIBUTE_VALUE6 like '%" + item + "%')" + 
         (index === (srchArr.length - 1) ? "" : " and ");
       });
 
     }
 
-    let sqlQuery = "Select count(1) as cnt from " + dbschema + ".XXIBM_PRODUCT_SKU a  left outer join " + dbschema + ".XXIBM_PRODUCT_CATALOGUE b  on a.Catalogue_Category = b.Commodity left outer join " + dbschema + ".XXIBM_PRODUCT_STYLE c  on a.Style_Item = c.Item_Number left outer join " + dbschema + ".XXIBM_PRODUCT_PRICING p  on a.Item_Number = p.Item_Number" + sqlPartSrc;
+    let sqlQuery = "Select count(1) as cnt from " + dbschema + ".XXIBM_PRODUCT_SKU a  left outer join " + dbschema + ".XXIBM_PRODUCT_CATALOGUE b  on a.Catalogue_Category = b.Commodity left outer join " + dbschema + ".XXIBM_PRODUCT_STYLE c  on a.Style_Item = c.Item_Number left outer join " + dbschema + ".XXIBM_PRODUCT_PRICING p  on a.Item_Number = p.Item_Number " + sqlPartSrc;
 
     global.dbconn.query(sqlQuery, function(err, rows, fields) {
       try{
@@ -412,7 +412,7 @@ app.get('/getstttoken', function(req, res) {
        }
     });
 
-    sqlQuery = "Select a.Item_Number,   a.Description sku_desc,   a.Long_Description,   a.Catalogue_Category,   a.SKU_UNIT_OF_MEASURE,   a.Style_Item, a.SKU_ATTRIBUTE_VALUE1,   a.SKU_ATTRIBUTE_VALUE2,   a.SKU_ATTRIBUTE_VALUE3,   a.SKU_ATTRIBUTE_VALUE4,   a.SKU_ATTRIBUTE_VALUE5,   a.SKU_ATTRIBUTE_VALUE6,   b.Segment,   b.Segment_Name,   b.Family,   b.Family_Name,   b.Class,   b.Class_Name,   b.Commodity_Name,   c.Description sty_Description,   c.Long_Description sty_Long_Description,  c.Brand,  p.List_Price,   p.Discount,   p.IN_STOCK from   " + dbschema + ".XXIBM_PRODUCT_SKU a  left outer join " + dbschema + ".XXIBM_PRODUCT_CATALOGUE b  on a.Catalogue_Category = b.Commodity left outer join " + dbschema + ".XXIBM_PRODUCT_STYLE c  on a.Style_Item = c.Item_Number left outer join " + dbschema + ".XXIBM_PRODUCT_PRICING p  on a.Item_Number = p.Item_Number " + sqlPartSrc + " ORDER By b.Commodity_Name, sty_Description LIMIT ? OFFSET ?";
+    sqlQuery = "select x.* from (SELECT a.Item_Number, a.Description as sku_desc, b.Commodity_Name, b.Commodity, b.Class_Name, b.Class, a.SKU_ATTRIBUTE1, a.SKU_ATTRIBUTE_VALUE1, a.SKU_ATTRIBUTE2, a.SKU_ATTRIBUTE_VALUE2, a.SKU_ATTRIBUTE3, a.SKU_ATTRIBUTE_VALUE3, a.SKU_ATTRIBUTE4, a.SKU_ATTRIBUTE_VALUE4, a.SKU_ATTRIBUTE5, a.SKU_ATTRIBUTE_VALUE5, a.SKU_ATTRIBUTE6, a.SKU_ATTRIBUTE_VALUE6, s.Brand, p.List_Price, p.Discount, p.IN_STOCK, ROW_NUMBER() over(partition by b.Commodity order by  b.Commodity_name, a.SKU_ATTRIBUTE_VALUE1, a.SKU_ATTRIBUTE_VALUE2,a.SKU_ATTRIBUTE_VALUE3, a.SKU_ATTRIBUTE_VALUE4, a.SKU_ATTRIBUTE_VALUE5, a.SKU_ATTRIBUTE_VALUE6) rnk from " + dbschema + ".XXIBM_PRODUCT_SKU a left outer join " + dbschema + ".XXIBM_PRODUCT_CATALOGUE b on a.Catalogue_Category = b.Commodity left outer join " + dbschema + ".XXIBM_PRODUCT_PRICING p on a.Item_Number = p.Item_Number left outer join " + dbschema + ".XXIBM_PRODUCT_STYLE s on a.Style_Item = s.Item_Number " + sqlWhere + ")x order by rnk LIMIT ? OFFSET ?";
 
     global.dbconn.query(sqlQuery, [limit, offset], function(err, rows, fields) {
       
