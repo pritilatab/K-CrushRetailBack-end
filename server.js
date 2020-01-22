@@ -151,7 +151,7 @@ app.get('/getstttoken', function(req, res) {
       let sqlWhere = "";
 
       let catg = decodeURI(req.params.cat);
-      console.log(catg);
+      //console.log(catg);
 
       if(catg == "men"){
 
@@ -196,7 +196,7 @@ app.get('/getstttoken', function(req, res) {
             }
           }
           else {
-            console.log(`DB fetch success for /products?p=${page}&l=${limit}`);
+            console.log(`DB fetch success for /products/${catg}?p=${page}&l=${limit}`);
             r = {
               status : 'success',
               data : rows,
@@ -302,7 +302,7 @@ app.get('/getstttoken', function(req, res) {
        }
     });
 
-    sqlQuery = "select x.* from (SELECT a.Item_Number, a.Description as sku_desc, b.Commodity_Name, b.Commodity, b.Class_Name, b.Class, a.SKU_ATTRIBUTE1, a.SKU_ATTRIBUTE_VALUE1, a.SKU_ATTRIBUTE2, a.SKU_ATTRIBUTE_VALUE2, a.SKU_ATTRIBUTE3, a.SKU_ATTRIBUTE_VALUE3, a.SKU_ATTRIBUTE4, a.SKU_ATTRIBUTE_VALUE4, a.SKU_ATTRIBUTE5, a.SKU_ATTRIBUTE_VALUE5, a.SKU_ATTRIBUTE6, a.SKU_ATTRIBUTE_VALUE6, s.Brand, p.List_Price, p.Discount, p.IN_STOCK, @row_number:=(CASE WHEN @commodity = Commodity THEN @row_number + 1 ELSE 1 END) AS rnk, (@commodity := Commodity) as commprev from " + dbschema + ".XXIBM_PRODUCT_SKU a left outer join " + dbschema + ".XXIBM_PRODUCT_CATALOGUE b on a.Catalogue_Category = b.Commodity left outer join " + dbschema + ".XXIBM_PRODUCT_PRICING p on a.Item_Number = p.Item_Number left outer join " + dbschema + ".XXIBM_PRODUCT_STYLE s on a.Style_Item = s.Item_Number inner join (select @row_number := 0) var " + sqlWhere + " order by b.Commodity_Name, a.SKU_ATTRIBUTE_VALUE1, a.SKU_ATTRIBUTE_VALUE2, a.SKU_ATTRIBUTE_VALUE3, a.SKU_ATTRIBUTE_VALUE4, a.SKU_ATTRIBUTE_VALUE5, a.SKU_ATTRIBUTE_VALUE6)x order by rnk LIMIT ? OFFSET ?";
+    sqlQuery = "select x.* from (SELECT a.Item_Number, a.Description as sku_desc, b.Commodity_Name, b.Commodity, b.Class_Name, b.Class, a.SKU_ATTRIBUTE1, a.SKU_ATTRIBUTE_VALUE1, a.SKU_ATTRIBUTE2, a.SKU_ATTRIBUTE_VALUE2, a.SKU_ATTRIBUTE3, a.SKU_ATTRIBUTE_VALUE3, a.SKU_ATTRIBUTE4, a.SKU_ATTRIBUTE_VALUE4, a.SKU_ATTRIBUTE5, a.SKU_ATTRIBUTE_VALUE5, a.SKU_ATTRIBUTE6, a.SKU_ATTRIBUTE_VALUE6, s.Brand, p.List_Price, p.Discount, p.IN_STOCK, @row_number:=(CASE WHEN @commodity = Commodity THEN @row_number + 1 ELSE 1 END) AS rnk, (@commodity := Commodity) as commprev from " + dbschema + ".XXIBM_PRODUCT_SKU a left outer join " + dbschema + ".XXIBM_PRODUCT_CATALOGUE b on a.Catalogue_Category = b.Commodity left outer join " + dbschema + ".XXIBM_PRODUCT_PRICING p on a.Item_Number = p.Item_Number left outer join " + dbschema + ".XXIBM_PRODUCT_STYLE s on a.Style_Item = s.Item_Number inner join (select @row_number := 0) var " + sqlPartSrc + " order by b.Commodity_Name, a.SKU_ATTRIBUTE_VALUE1, a.SKU_ATTRIBUTE_VALUE2, a.SKU_ATTRIBUTE_VALUE3, a.SKU_ATTRIBUTE_VALUE4, a.SKU_ATTRIBUTE_VALUE5, a.SKU_ATTRIBUTE_VALUE6)x order by rnk LIMIT ? OFFSET ?";
 
     global.dbconn.query(sqlQuery, [limit, offset], function(err, rows, fields) {
       
