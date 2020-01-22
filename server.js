@@ -335,7 +335,7 @@ app.get('/getstttoken', function(req, res) {
 
 
 /* API action: V2 Search Products based on description */
-  .get('/searchv2/:q/?', function(req, res) {
+  .get('/searchv2/:q?', function(req, res) {
 
     let page = 1;
     let limit = 12;
