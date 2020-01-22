@@ -225,117 +225,7 @@ app.get('/getstttoken', function(req, res) {
 
 
   /* API action: Search Products based on description */
-  .get('/search/:q/?', function(req, res) {
-
-    let page = 1;
-    let limit = 12;
-    let offset = 0;
-    let r = {};
-    let cnt = 0;
-
-
-    //check for valid page number and limit
-      if(req.query.p != undefined && req.query.l != undefined){
-        page = parseInt(decodeURI(req.query.p));
-        limit = parseInt(decodeURI(req.query.l));
-        limit = (limit < 10) ? 10 : limit;
-        offset = ((page == 0 ? 1 : page) - 1) * limit;
-      }
-
-    //check for null search string
-    let srch_str = decodeURI(req.params.q);
-
-
-    if (req.params.q == undefined || req.params.q == null || req.params.q == "") {
-      console.log('Invalid Query string - ' + req.params.q);
-      r = {
-        status: 'failed',
-        data: [],
-        count: cnt,
-        error: 'Invalid Search - ' + srch_str
-      };
-      res.set('Content-Type', 'text/json');
-      res.end(JSON.stringify(r));
-    }
-
-    let sqlPartSrc = "";
-
-    if (srch_str.toUpperCase() != 'ALL') {
-      sqlPartSrc = " where a.Description like '%" + srch_str + "%' or a.Long_Description like '%" + srch_str + "%' or b.Commodity_Name like '%" + srch_str + "%' or b.Class_Name like '%" + srch_str + "%' or c.Brand like '%" + srch_str + "%' or a.SKU_ATTRIBUTE_VALUE1 like '%" + srch_str + "%' or a.SKU_ATTRIBUTE_VALUE2 like '%" + srch_str + "%' or a.SKU_ATTRIBUTE_VALUE3 like '%" + srch_str + "%' or a.SKU_ATTRIBUTE_VALUE4 like '%" + srch_str + "%' or a.SKU_ATTRIBUTE_VALUE5 like '%" + srch_str + "%' or a.SKU_ATTRIBUTE_VALUE6 like '%" + srch_str + "%'";
-    }
-
-    let sqlQuery = "Select count(1) as cnt from " + dbschema + ".XXIBM_PRODUCT_SKU a  left outer join " + dbschema + ".XXIBM_PRODUCT_CATALOGUE b  on a.Catalogue_Category = b.Commodity left outer join " + dbschema + ".XXIBM_PRODUCT_STYLE c  on a.Style_Item = c.Item_Number left outer join " + dbschema + ".XXIBM_PRODUCT_PRICING p  on a.Item_Number = p.Item_Number" + sqlPartSrc;
-
-    global.dbconn.query(sqlQuery, function(err, rows, fields) {
-      try{
-          if (err) {
-            console.log(sqlQuery);
-            throw err;
-          }
-
-          if (rows.length == 0) {
-            console.log('DB fetch no records');
-          }
-          else {
-            console.log(`DB fetch success for /search/${srch_str}p=${page}&l=${limit}  count = ${rows[0].cnt}`);
-            cnt = rows[0].cnt;
-          }
-       }
-       catch(e){
-         console.log('DB query error - ' + JSON.stringify(e));
-            r = {
-              status : 'failed',
-              data : [],
-              count : 0,
-              error : 'Internal Error'
-            }
-       }
-    });
-
-    sqlQuery = "Select a.Item_Number,   a.Description sku_desc,   a.Long_Description,   a.Catalogue_Category,   a.SKU_UNIT_OF_MEASURE,   a.Style_Item, a.SKU_ATTRIBUTE_VALUE1,   a.SKU_ATTRIBUTE_VALUE2,   a.SKU_ATTRIBUTE_VALUE3,   a.SKU_ATTRIBUTE_VALUE4,   a.SKU_ATTRIBUTE_VALUE5,   a.SKU_ATTRIBUTE_VALUE6,   b.Segment,   b.Segment_Name,   b.Family,   b.Family_Name,   b.Class,   b.Class_Name,   b.Commodity_Name,   c.Description sty_Description,   c.Long_Description sty_Long_Description,  c.Brand,  p.List_Price,   p.Discount,   p.IN_STOCK from   " + dbschema + ".XXIBM_PRODUCT_SKU a  left outer join " + dbschema + ".XXIBM_PRODUCT_CATALOGUE b  on a.Catalogue_Category = b.Commodity left outer join " + dbschema + ".XXIBM_PRODUCT_STYLE c  on a.Style_Item = c.Item_Number left outer join " + dbschema + ".XXIBM_PRODUCT_PRICING p  on a.Item_Number = p.Item_Number " + sqlPartSrc + " ORDER By b.Commodity_Name, sty_Description LIMIT ? OFFSET ?";
-
-    global.dbconn.query(sqlQuery, [limit, offset], function(err, rows, fields) {
-      
-      try {
-        if(err){
-            console.log('DB fetch error - ' + JSON.stringify(err));
-            r = {
-              status : 'failed',
-              data : [],
-              count : 0,
-              error : 'No records'
-            }
-        }
-        else {
-            console.log(`DB fetch success for /search/${srch_str}?p=${page}&l=${limit}`);
-            r = {
-              status : 'success',
-              data : rows,
-              count : rows.length,
-              error : ''
-            }
-        } 
-
-      }catch(e){
-          console.log('DB query error - ' + JSON.stringify(e));
-            r = {
-              status : 'failed',
-              data : [],
-              count : 0,
-              error : 'Internal Error'
-            }
-      }
-
-      res.set('Content-Type', 'text/json');
-      res.end(JSON.stringify(r)); 
-
-    });
-
-  })
-
-
-/* API action: V2 Search Products based on description */
-  .get('/searchv2/:q?', function(req, res) {
+  .get('/search/:q?', function(req, res) {
 
     let page = 1;
     let limit = 12;
@@ -428,7 +318,7 @@ app.get('/getstttoken', function(req, res) {
         }
         else {
             console.log(`DB fetch success for /search/${srch_str}?p=${page}&l=${limit}`);
-            console.log(sqlQuery);
+            //console.log(sqlQuery);
             r = {
               status : 'success',
               data : rows,
