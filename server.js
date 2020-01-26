@@ -596,7 +596,7 @@ app.get('/getstttoken', function(req, res) {
       if (err) throw err;
 
 	console.log('Fetch table data - ' + req.params.tbl);
-      res.json(rows);
+      res.json({data: rows, header: fields});
     })
 
   })
