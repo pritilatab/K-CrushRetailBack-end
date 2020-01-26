@@ -590,9 +590,9 @@ app.get('/getstttoken', function(req, res) {
 //API Action: DEBUG - get table data
   .get('/table/:tbl', function(req, res) {
 
-    let sqlQuery = "SELECT * FROM ?";
+    let sqlQuery = "SELECT * FROM " + dbschema + "." + req.params.tbl;
 
-    global.dbconn.query(sqlQuery, [req.params.tbl], function(err, rows, fields) {
+    global.dbconn.query(sqlQuery, function(err, rows, fields) {
       if (err) throw err;
 
 	console.log('Fetch table data - ' + req.params.tbl);
