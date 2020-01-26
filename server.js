@@ -587,6 +587,21 @@ app.get('/getstttoken', function(req, res) {
   })
 
 
+//API Action: DEBUG - get table data
+  .get('/table/:tbl', function(req, res) {
+
+    let sqlQuery = "SELECT * FROM ?";
+
+    global.dbconn.query(sqlQuery, [req.params.tbl], function(err, rows, fields) {
+      if (err) throw err;
+
+	console.log('Fetch table data - ' + req.params.tbl);
+      res.json(rows);
+    })
+
+  })
+
+
 
   //API Action: fetch an image as binary data
   .get('/image/:id', function(req, res) {
