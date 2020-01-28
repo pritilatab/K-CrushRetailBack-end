@@ -20,7 +20,7 @@ const imgconfig = {
 };
 
 //Watson STT token
-let stt_token;
+let auth_token;
 
 const mysql = require('mysql');//mysql db object
 
@@ -73,9 +73,11 @@ app.get('/', function(req, res) {
 
 })
 
-//API action: Get Watson STT service access using IAM Access token from IBM Cloud
-app.get('/getstttoken', function(req, res) {
-  // The following three lines translate the curl request provided by IBM into a nodeJS request format so that the token can be retrieved by our server code. 
+//API action: Get access token using IAM Access token from IBM Cloud
+app.get('/getauthtoken', function(req, res) {
+  
+  // The following three lines translate the curl request 
+  //into a nodeJS request format so that the token can be retrieved by the server code. 
   let form = {
     grant_type: 'urn:ibm:params:oauth:grant-type:apikey',
     apikey: "BNVh4bMvUUIFeqQ3NeZr986PdCLaU4_Q47a6fCaYM3QM"
@@ -96,14 +98,15 @@ app.get('/getstttoken', function(req, res) {
   // get the new token
   request(options, function(error, response, body) {
     if (!error && response.statusCode == 200) {
+      console.log("IBM Cloud IAM access token received successfully.");
       // send the token back as the 'success' item in the returned json object
-      stt_token = JSON.parse(body).access_token;
-      res.send({ success: JSON.parse(body).access_token });
+      auth_token = JSON.parse(body).access_token;
+      res.send({ success: auth_token });
     }
     else {
       // send the failure message back as the 'failed' item in the returned json object.
-      console.log('Error getting STT token:  ', error);
-      stt_token = "";
+      console.log('Error getting IBM IAM Cloud access token:  ', error);
+      auth_token = "";
       res.send({ failed: error.message })
     }
   });
