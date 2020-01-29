@@ -114,23 +114,6 @@ app.get('/getauthtoken', function(req, res) {
 })
 
 
-  /* API action: Item details based on Item_Number */
-  .get('/itemdetail/:id', function(req, res) {
-
-    let sqlQuery = "Select   a.Item_Number sku_Item_Number,   a.Description sku_Description,   a.Long_Description sku_Long_Description,   a.Catalogue_Category sku_Catalogue_Category,   a.SKU_UNIT_OF_MEASURE sku_SKU_UNIT_OF_MEASURE,   a.Style_Item sku_Style_Item,   a.SKU_ATTRIBUTE1 sku_SKU_ATTRIBUTE1,   a.SKU_ATTRIBUTE2 sku_SKU_ATTRIBUTE2,   a.SKU_ATTRIBUTE3 sku_SKU_ATTRIBUTE3,   a.SKU_ATTRIBUTE4 sku_SKU_ATTRIBUTE4,   a.SKU_ATTRIBUTE5 sku_SKU_ATTRIBUTE5,   a.SKU_ATTRIBUTE6 sku_SKU_ATTRIBUTE6,   a.SKU_ATTRIBUTE_VALUE1 sku_SKU_ATTRIBUTE_VALUE1,   a.SKU_ATTRIBUTE_VALUE2 sku_SKU_ATTRIBUTE_VALUE2,   a.SKU_ATTRIBUTE_VALUE3 sku_SKU_ATTRIBUTE_VALUE3,   a.SKU_ATTRIBUTE_VALUE4 sku_SKU_ATTRIBUTE_VALUE4,   a.SKU_ATTRIBUTE_VALUE5 sku_SKU_ATTRIBUTE_VALUE5,   a.SKU_ATTRIBUTE_VALUE6 sku_SKU_ATTRIBUTE_VALUE6,   b.Segment cat_Segment,   b.Segment_Name cat_Segment_Name,   b.Family cat_Family,   b.Family_Name cat_Family_Name,   b.Class cat_Class,   b.Class_Name cat_Class_Name,   b.Commodity_Name cat_Commodity_Name,   c.Description sty_Description,   c.Long_Description sty_Long_Description,   c.Brand sty_Brand,   p.PriceID prc_PriceID,   p.List_Price prc_List_Price,   p.Discount prc_Discount,   p.IN_STOCK prc_IN_STOCK,   p.Price_Effective_Date prc_Price_Effective_Date from   " + dbschema + ".XXIBM_PRODUCT_SKU a  inner join " + dbschema + ".XXIBM_PRODUCT_CATALOGUE b  on a.Catalogue_Category = b.Commodity inner join " + dbschema + ".XXIBM_PRODUCT_STYLE c  on a.Style_Item = c.Item_Number left outer join " + dbschema + ".XXIBM_PRODUCT_PRICING p  on a.Item_Number = p.Item_Number where a.Item_Number = ?";
-
-    global.dbconn.query(sqlQuery, [req.params.id], function(err, rows, fields) {
-      if (err) throw err;
-
-      console.log('DB fetch success for /itemdetail/id');
-
-      //console.log(rows);
-      res.end(JSON.stringify(rows));
-    })
-
-  })
-
-
   /* API action: Get ALL products 
   * /products/:cat?p=1&l=12
   * p = page number, l = results per page
@@ -276,8 +259,10 @@ app.get('/getauthtoken', function(req, res) {
       });
 
     }
+	
+    let sqlQuery = '';
 
-    let sqlQuery = "Select count(1) as cnt from " + dbschema + ".XXIBM_PRODUCT_SKU a  left outer join " + dbschema + ".XXIBM_PRODUCT_CATALOGUE b  on a.Catalogue_Category = b.Commodity left outer join " + dbschema + ".XXIBM_PRODUCT_STYLE c  on a.Style_Item = c.Item_Number left outer join " + dbschema + ".XXIBM_PRODUCT_PRICING p  on a.Item_Number = p.Item_Number " + sqlPartSrc;
+    /*let sqlQuery = "Select count(1) as cnt from " + dbschema + ".XXIBM_PRODUCT_SKU a  left outer join " + dbschema + ".XXIBM_PRODUCT_CATALOGUE b  on a.Catalogue_Category = b.Commodity left outer join " + dbschema + ".XXIBM_PRODUCT_STYLE c  on a.Style_Item = c.Item_Number left outer join " + dbschema + ".XXIBM_PRODUCT_PRICING p  on a.Item_Number = p.Item_Number " + sqlPartSrc;
 
     global.dbconn.query(sqlQuery, function(err, rows, fields) {
       try{
@@ -303,7 +288,7 @@ app.get('/getauthtoken', function(req, res) {
               error : 'Internal Error'
             }
        }
-    });
+    });*/
 
     sqlQuery = "select x.* from (SELECT a.Item_Number, a.Description as sku_desc, b.Commodity_Name, b.Commodity, b.Class_Name, b.Class, a.SKU_ATTRIBUTE1, a.SKU_ATTRIBUTE_VALUE1, a.SKU_ATTRIBUTE2, a.SKU_ATTRIBUTE_VALUE2, a.SKU_ATTRIBUTE3, a.SKU_ATTRIBUTE_VALUE3, a.SKU_ATTRIBUTE4, a.SKU_ATTRIBUTE_VALUE4, a.SKU_ATTRIBUTE5, a.SKU_ATTRIBUTE_VALUE5, a.SKU_ATTRIBUTE6, a.SKU_ATTRIBUTE_VALUE6, s.Brand, p.List_Price, p.Discount, p.IN_STOCK, @row_number:=(CASE WHEN @commodity = Commodity THEN @row_number + 1 ELSE 1 END) AS rnk, (@commodity := Commodity) as commprev from " + dbschema + ".XXIBM_PRODUCT_SKU a left outer join " + dbschema + ".XXIBM_PRODUCT_CATALOGUE b on a.Catalogue_Category = b.Commodity left outer join " + dbschema + ".XXIBM_PRODUCT_PRICING p on a.Item_Number = p.Item_Number left outer join " + dbschema + ".XXIBM_PRODUCT_STYLE s on a.Style_Item = s.Item_Number inner join (select @row_number := 0) var " + sqlPartSrc + " order by b.Commodity_Name, a.SKU_ATTRIBUTE_VALUE1, a.SKU_ATTRIBUTE_VALUE2, a.SKU_ATTRIBUTE_VALUE3, a.SKU_ATTRIBUTE_VALUE4, a.SKU_ATTRIBUTE_VALUE5, a.SKU_ATTRIBUTE_VALUE6)x order by rnk LIMIT ? OFFSET ?";
 
